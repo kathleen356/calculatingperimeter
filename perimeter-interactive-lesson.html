@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.2 Calculating the perimeter for rectangular shapes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F8FC;
+    --grid:#E1E8F2;
+    --grid-strong:#CFDAEC;
+    --ink:#18233F;
+    --ink-soft:#5A6783;
+    --ink-faint:#8A95AD;
+    --accent:#4F46E5;
+    --accent-soft:#EAE9FF;
+    --mode:#DB2777;
+    --ok:#16A34A; --ok-soft:#E7F6EC;
+    --green:#16A34A; --green-bg:#E7F6EC; --green-line:#B7E4C6;
+    --amber:#D97706; --amber-bg:#FCF1E1; --amber-line:#F3D9AE;
+    --red:#DC2626;   --red-bg:#FBEAEA;   --red-line:#F2C2C2;
+    --c-orange:#F0862E; --c-green:#6FB544; --c-magenta:#D94FB0;
+    --c-blue:#3E9AE6; --c-purple:#8B6FE0; --c-teal:#2FB6A8; --c-red:#E8604C;
+    --card:#FFFFFF;
+    --shadow:0 1px 2px rgba(24,35,63,.05), 0 10px 30px -18px rgba(24,35,63,.25);
+    --radius:18px;
+    --maxw:1020px;
+    --display:'Fredoka', 'Trebuchet MS', system-ui, sans-serif;
+    --body:'Nunito', system-ui, -apple-system, sans-serif;
+    --mono:'Space Mono', ui-monospace, 'Courier New', monospace;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); font-family:var(--body);
+    font-size:17px; line-height:1.6;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:26px 26px;
+    background-position:-1px -1px;
+  }
+  body.students .teacher-note{display:none !important}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+
+  header.bar{
+    position:sticky; top:0; z-index:40;
+    background:rgba(246,248,252,.88); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--grid-strong);
+  }
+  .bar-inner{max-width:var(--maxw); margin:0 auto; padding:10px 20px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+  .brand{font-family:var(--display); font-weight:700; font-size:1.05rem; letter-spacing:.2px;
+    display:flex; align-items:center; gap:9px; margin-right:auto}
+  .brand .glyph{display:inline-block; width:24px; height:22px; flex:0 0 auto}
+  nav.jump{display:flex; gap:4px; flex-wrap:wrap}
+  nav.jump a{font-family:var(--display); font-weight:500; font-size:.82rem; text-decoration:none;
+    color:var(--ink-soft); padding:6px 10px; border-radius:999px}
+  nav.jump a:hover{color:var(--ink); background:var(--accent-soft)}
+  .tview{font-family:var(--display); font-weight:600; font-size:.8rem; cursor:pointer;
+    border:1.5px solid var(--accent); color:var(--accent); background:transparent;
+    padding:6px 13px; border-radius:999px; display:inline-flex; align-items:center; gap:7px}
+  .tview .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  body.students .tview{border-color:var(--ink-faint); color:var(--ink-soft)}
+  body.students .tview .dot{background:var(--ink-faint)}
+
+  .hero{padding:54px 0 30px}
+  .eyebrow{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--accent); font-weight:700}
+  .hero h1{font-family:var(--display); font-weight:700; line-height:1.05;
+    font-size:clamp(2.3rem,6vw,4.2rem); margin:.25em 0 .15em; letter-spacing:-.5px}
+  .hero h1 .pink{color:var(--mode)} .hero h1 .green{color:var(--c-green)}
+  .lead{font-size:1.08rem; color:var(--ink-soft); max-width:none; margin:.2em 0 1.2em}
+
+  section{padding:38px 0; scroll-margin-top:64px}
+  .part-tag{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:.72rem;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:6px}
+  .part-tag::before{content:""; width:22px; height:2px; background:var(--accent); display:inline-block}
+  h2{font-family:var(--display); font-weight:700; font-size:clamp(1.6rem,3.2vw,2.3rem);
+    margin:.1em 0 .35em; letter-spacing:-.3px; line-height:1.08}
+  h3{font-family:var(--display); font-weight:600; font-size:1.2rem; margin:0 0 .4em}
+  h4{font-family:var(--display); font-weight:700; margin:0 0 8px; font-size:1.05rem}
+
+  .card{background:var(--card); border:1px solid var(--grid-strong); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:24px}
+  .card + .card{margin-top:18px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:stretch}
+  .two > .card + .card{margin-top:0}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+
+  .keyword{color:var(--mode); font-weight:800}
+  .define{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:10px;
+    padding:14px 16px; font-size:1.05rem}
+  .define b{color:var(--accent)}
+
+  .btn{font-family:var(--display); font-weight:600; font-size:.9rem; cursor:pointer; border-radius:10px;
+    padding:9px 16px; border:1.5px solid var(--accent); background:var(--accent); color:#fff;
+    transition:transform .1s, filter .15s; text-decoration:none; display:inline-flex; align-items:center; gap:8px}
+  .btn:hover{filter:brightness(1.06)} .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:transparent; color:var(--accent)}
+  .btn.sm{font-size:.82rem; padding:7px 13px}
+  .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; align-items:center}
+
+  .scenario{background:var(--paper); border-radius:12px; padding:16px 18px; border:1px solid var(--grid-strong)}
+  .scenario + .scenario{margin-top:14px}
+  .qlist{margin:.4em 0 0; padding-left:1.25em} .qlist li{margin:5px 0}
+  .hintline{font-size:.9rem; color:var(--ink-faint); margin:10px 0 0; font-style:italic}
+
+  .answer{margin-top:14px; border-radius:12px; border:1px solid var(--grid-strong); background:#fff;
+    overflow:hidden; max-height:0; opacity:0; transition:max-height .35s ease, opacity .25s ease}
+  .answer.open{max-height:1800px; opacity:1}
+  .answer .inner{padding:14px 18px}
+  .answer h5{font-family:var(--display); font-weight:700; margin:0 0 6px; color:var(--ok); font-size:.95rem;
+    display:flex; align-items:center; gap:8px}
+  .answer ul{margin:.2em 0; padding-left:1.2em} .answer li{margin:3px 0; font-size:.96rem}
+
+  /* interactive check quiz */
+  .qcheck{display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:#fff; border:1.5px solid var(--grid-strong);
+    border-radius:12px; padding:12px 14px; margin-bottom:10px; transition:border-color .15s, background .15s}
+  .qcheck .qc-num{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#fff;font-family:var(--display);
+    font-weight:700;display:grid;place-items:center;flex:0 0 auto;font-size:.9rem}
+  .qcheck .qc-text{flex:1 1 130px; font-weight:600}
+  .qcheck .qc-answer{display:flex; align-items:center; gap:8px; margin-left:auto; flex:0 0 auto}
+  .qcheck input{width:80px; font-family:var(--mono); font-weight:700; font-size:1rem; text-align:center;
+    border:1.5px solid var(--grid-strong); border-radius:9px; padding:7px 8px; color:var(--ink)}
+  .qcheck input.txt{width:150px; text-align:left; font-family:var(--body); font-weight:700}
+  .qcheck input:focus{outline:none; border-color:var(--accent)}
+  .qcheck .unit{font-family:var(--mono); font-size:.85rem; color:var(--ink-faint)}
+  .qcheck.correct{border-color:var(--ok); background:var(--ok-soft)}
+  .qcheck.correct input{border-color:var(--ok)}
+  .qcheck.correct .qc-num{background:var(--ok)}
+  .qcheck.wrong{border-color:var(--amber); background:var(--amber-bg)}
+  .qcheck.wrong input{border-color:var(--amber)}
+  .qc-fb{font-family:var(--display); font-weight:600; font-size:.88rem; flex:1 1 100%; margin:0}
+  .qcheck.correct .qc-fb{color:var(--ok)}
+  .qcheck.wrong .qc-fb{color:var(--amber)}
+  .qc-overall{font-family:var(--display); font-weight:700; font-size:1.05rem; margin:4px 0 0; min-height:1.4em}
+  .qc-overall.win{color:var(--ok)}
+  .qcheck .qc-open{flex:1 1 100%; margin-top:8px; min-height:70px; width:100%; font-family:var(--body); font-size:.95rem;
+    border:1.5px solid var(--grid-strong); border-radius:9px; padding:9px 11px; color:var(--ink); resize:vertical}
+  .qcheck .qc-open::placeholder{color:var(--ink-faint)}
+  .qcheck .qc-open:focus{outline:none; border-color:var(--accent)}
+
+  /* teacher note */
+  .teacher-note{background:#FFFBEA; border:1px solid #F2E2A6; border-radius:12px;
+    padding:12px 16px; margin-top:16px; font-size:.93rem; color:#6b5d18}
+  .teacher-note b{font-family:var(--display); color:#8a6d00}
+  .teacher-note .pill{font-family:var(--mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase;
+    background:#8a6d00; color:#fff; padding:3px 8px; border-radius:999px; margin-right:8px; vertical-align:1px}
+
+  /* success criteria */
+  .reflect{display:grid; gap:10px}
+  .rrow{background:#fff; border:1px solid var(--grid-strong); border-radius:12px; padding:12px 16px;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .rrow .txt{flex:1 1 220px; font-weight:600}
+  .rrow .dotmark{width:12px;height:12px;border-radius:3px;background:var(--accent);flex:0 0 auto}
+  .rate{display:inline-flex; gap:6px; flex-wrap:wrap}
+  .rate button{font-family:var(--display); font-weight:600; font-size:.8rem; border:1.5px solid var(--grid-strong);
+    background:#fff; color:var(--ink-soft); border-radius:999px; padding:5px 12px; cursor:pointer}
+  .rate button.got.on{background:var(--green); border-color:var(--green); color:#fff}
+  .rate button.near.on{background:var(--amber); border-color:var(--amber); color:#fff}
+  .rate button.help.on{background:var(--red); border-color:var(--red); color:#fff}
+  .talk{margin-top:18px; background:var(--ink); color:#fff; border-radius:var(--radius); padding:18px 22px}
+  .talk b{color:#FFD24A; font-family:var(--display)}
+  .divider{height:1px; background:var(--grid-strong); margin:22px 0}
+
+  /* curriculum link */
+  .eyebrow-row{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+  .curric-link{font-family:var(--display); font-weight:700; font-size:.72rem; cursor:pointer; text-decoration:none;
+    padding:7px 16px; border-radius:999px; border:1.5px solid var(--grid-strong);
+    background:var(--card); color:var(--accent); transition:transform .1s, border-color .15s, color .15s;
+    display:inline-block}
+  .curric-link:hover{border-color:var(--accent); color:var(--accent)}
+  .curric-link:active{transform:translateY(1px)}
+  .curric{font-family:var(--mono); font-size:.72rem; color:var(--ink-faint); margin-top:4px}
+
+  /* differentiated practice */
+  .filterbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:6px 0 22px}
+  .filterbar .lbl{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+  .chip{font-family:var(--display); font-weight:600; font-size:.86rem; cursor:pointer; border-radius:999px;
+    padding:7px 15px; border:1.5px solid var(--grid-strong); background:#fff; color:var(--ink-soft);
+    display:inline-flex; align-items:center; gap:8px; transition:.15s}
+  .chip .lt{width:11px;height:11px;border-radius:50%}
+  .chip[data-f="all"] .lt{background:linear-gradient(90deg,var(--green),var(--amber),var(--red))}
+  .chip[data-f="green"] .lt{background:var(--green)}
+  .chip[data-f="amber"] .lt{background:var(--amber)}
+  .chip[data-f="red"] .lt{background:var(--red)}
+  .chip.on{color:var(--ink); border-color:var(--ink); box-shadow:var(--shadow)}
+
+  .activity{border-radius:var(--radius); border:1px solid var(--grid-strong); background:#fff;
+    box-shadow:var(--shadow); padding:0; overflow:hidden; margin-bottom:18px}
+  .activity.hide{display:none}
+  .activity .head{padding:16px 22px; display:flex; align-items:center; gap:12px; color:#fff; flex-wrap:wrap}
+  .activity .head .tier{font-family:var(--display); font-weight:700; font-size:1.15rem; letter-spacing:.2px}
+  .activity .head .tag{margin-left:auto; font-family:var(--mono); font-size:.72rem; letter-spacing:.1em;
+    text-transform:uppercase; background:rgba(255,255,255,.22); padding:5px 10px; border-radius:999px}
+  .activity[data-tier="green"] .head{background:var(--green)}
+  .activity[data-tier="amber"] .head{background:var(--amber)}
+  .activity[data-tier="red"] .head{background:var(--red)}
+  .activity .body{padding:20px 22px}
+  .activity[data-tier="green"] .body{background:var(--green-bg)}
+  .activity[data-tier="amber"] .body{background:var(--amber-bg)}
+  .activity[data-tier="red"] .body{background:var(--red-bg)}
+  .activity .scenario{background:#fff}
+  .activity[data-tier="amber"] .answer h5{color:var(--amber)}
+  .activity[data-tier="red"] .answer h5{color:var(--red)}
+  .muted{color:var(--ink-soft)}
+
+  footer{padding:34px 0 60px; color:var(--ink-faint); font-size:.85rem; text-align:center}
+  :focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:6px}
+
+  /* ===== perimeter-specific ===== */
+  .formula-strip{display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;
+    background:var(--accent-soft); border:1.5px solid var(--accent); border-radius:14px;
+    padding:18px 20px; margin:14px 0}
+  .formula-strip .fx{font-family:var(--display); font-weight:700; font-size:clamp(1.1rem,2.6vw,1.6rem); color:var(--accent)}
+  .formula-strip .fx .lit{color:var(--mode)}
+
+  .shapegrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(178px,1fr)); gap:14px; margin-top:6px}
+  .shapecell{background:#fff; border:1.5px solid var(--grid-strong); border-radius:12px; padding:12px 10px 10px; text-align:center}
+  .shapecell .slab{font-family:var(--display); font-weight:700; font-size:1rem; color:var(--accent);
+    display:block; text-align:left; margin:0 0 2px 4px}
+  .shapecell svg{display:block; margin:0 auto; max-width:100%; height:auto}
+
+  /* perimeter walker */
+  .walkbox{background:#fff; border:1.5px solid var(--grid-strong); border-radius:14px; padding:18px 20px; margin:14px 0}
+  .walkstage{display:flex; align-items:center; justify-content:center; padding:6px 0 2px}
+  .walkreadout{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;
+    font-family:var(--display); font-weight:700; font-size:1.05rem; margin-top:10px}
+  .walkreadout .sum{font-family:var(--mono); background:var(--accent); color:#fff; border-radius:999px; padding:4px 14px}
+  .walkreadout .done{color:var(--ok)}
+
+  /* builder sliders */
+  .builder{background:linear-gradient(180deg,#fff, var(--accent-soft)); border:1.5px solid var(--grid-strong)}
+  .builder .buildhead{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px}
+  .builder .buildhead .spark{font-size:1.4rem; animation:wiggle 2.4s ease-in-out infinite}
+  @keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+  .slrow{display:grid; grid-template-columns:86px 1fr 92px; align-items:center; gap:14px;
+    background:#fff; border:1.5px solid var(--grid-strong); border-radius:12px; padding:10px 14px; margin-bottom:10px}
+  @media(max-width:560px){.slrow{grid-template-columns:70px 1fr 78px; gap:9px}}
+  .slrow .s-lab{font-family:var(--display); font-weight:700; color:var(--ink)}
+  .slrow .s-val{font-family:var(--mono); font-weight:700; text-align:right; color:var(--accent)}
+  input.slider{-webkit-appearance:none; appearance:none; width:100%; height:8px; border-radius:999px;
+    background:linear-gradient(90deg,var(--accent) var(--fill,50%), var(--grid) var(--fill,50%)); outline:none}
+  input.slider::-webkit-slider-thumb{-webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+    background:#fff; border:3px solid var(--accent); cursor:pointer; box-shadow:0 1px 4px rgba(24,35,63,.3)}
+  input.slider::-moz-range-thumb{width:20px; height:20px; border-radius:50%; background:#fff;
+    border:3px solid var(--accent); cursor:pointer}
+  .buildout{display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+    background:#fff; border:1.5px solid var(--accent); border-radius:12px; padding:14px 16px; margin-top:6px}
+  .buildout .bo-eq{font-family:var(--display); font-weight:700; font-size:1.05rem}
+  .buildout .bo-eq b{color:var(--mode); font-size:1.3rem}
+
+  /* sort: perimeter or area */
+  .sortrow{display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:#fff;
+    border:1.5px solid var(--grid-strong); border-radius:12px; padding:11px 14px; margin-bottom:9px;
+    transition:border-color .15s, background .15s}
+  .sortrow .s-txt{flex:1 1 200px; font-weight:600}
+  .sortrow .s-btns{display:inline-flex; gap:7px; margin-left:auto}
+  .sortrow .s-btns button{font-family:var(--display); font-weight:600; font-size:.82rem; cursor:pointer;
+    border:1.5px solid var(--grid-strong); background:#fff; color:var(--ink-soft); border-radius:999px; padding:6px 14px}
+  .sortrow.correct{border-color:var(--ok); background:var(--ok-soft)}
+  .sortrow.wrong{border-color:var(--amber); background:var(--amber-bg)}
+  .sortrow.correct .s-btns button.picked{background:var(--ok); border-color:var(--ok); color:#fff}
+  .sortrow.wrong .s-btns button.picked{background:var(--amber); border-color:var(--amber); color:#fff}
+  .sortrow .s-fb{flex:1 1 100%; font-family:var(--display); font-weight:600; font-size:.86rem; margin:0}
+  .sortrow.correct .s-fb{color:var(--ok)} .sortrow.wrong .s-fb{color:var(--amber)}
+
+  /* spot the mistake */
+  .mistake{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px}
+  @media(max-width:640px){.mistake{grid-template-columns:1fr}}
+  .stu{border:1.5px solid var(--grid-strong); border-radius:12px; background:#fff; padding:14px 16px; cursor:pointer;
+    text-align:left; font-family:var(--body); font-size:1rem; color:var(--ink); transition:.15s}
+  .stu:hover{border-color:var(--accent)}
+  .stu .who{font-family:var(--display); font-weight:700; display:block; margin-bottom:6px}
+  .stu .work{font-family:var(--mono); font-size:1rem; color:var(--ink-soft)}
+  .stu.right{border-color:var(--ok); background:var(--ok-soft)}
+  .stu.wrongpick{border-color:var(--red); background:var(--red-bg)}
+  .mistake-fb{font-family:var(--display); font-weight:600; margin:12px 0 0; min-height:1.4em}
+  .mistake-fb.good{color:var(--ok)} .mistake-fb.bad{color:var(--red)}
+
+  /* draw-your-own */
+  .drawgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px}
+  .drawcell{background:#fff; border:1.5px solid var(--grid-strong); border-radius:12px; padding:14px}
+  .drawcell h5{font-family:var(--display); font-weight:700; margin:0 0 8px; font-size:.95rem; color:var(--accent)}
+  .drawcell .dc-in{display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:8px}
+  .drawcell input{width:62px; font-family:var(--mono); font-weight:700; text-align:center;
+    border:1.5px solid var(--grid-strong); border-radius:8px; padding:6px; color:var(--ink)}
+  .drawcell input:focus{outline:none; border-color:var(--accent)}
+  .drawcell .dc-fb{font-family:var(--display); font-weight:600; font-size:.84rem; min-height:1.3em; margin:4px 0 0}
+  .drawcell.ok{border-color:var(--ok); background:var(--ok-soft)}
+  .drawcell.ok .dc-fb{color:var(--ok)}
+  .drawcell.no{border-color:var(--amber); background:var(--amber-bg)}
+  .drawcell.no .dc-fb{color:var(--amber)}
+  .drawcell .dc-svg{margin-top:8px; min-height:4px}
+</style>
+</head>
+<body class="teacher">
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand">
+      <svg class="glyph" viewBox="0 0 24 22" aria-hidden="true">
+        <rect x="1.5" y="3" width="21" height="15" rx="1.5" fill="none" stroke="var(--c-orange)" stroke-width="3"/>
+        <rect x="6" y="7.5" width="12" height="6" rx="1" fill="var(--c-green)" opacity=".5"/>
+      </svg>
+      5.2 Calculating the perimeter for rectangular shapes</div>
+    <nav class="jump">
+      <a href="#learn">Perimeter</a>
+      <a href="#formula">Formula</a>
+      <a href="#check">Quick check</a>
+      <a href="#practice">Practice</a>
+      <a href="#exit">Reflection</a>
+      <a href="#exitticket">Exit ticket</a>
+    </nav>
+    <button class="tview" id="tview" aria-pressed="true">
+      <span class="dot"></span><span id="tviewlabel">Teacher notes: on</span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="wrap hero">
+  <div class="eyebrow-row">
+    <div class="eyebrow">Learning Intention</div>
+    <a class="curric-link" href="https://f10.vcaa.vic.edu.au/learning-areas/mathematics/curriculum?level=5#VC2M5M02" target="_blank" rel="noopener">VC2M5M02 &middot; Victorian Curriculum 2.0 &#8599;</a>
+  </div>
+  <h1>5.2 Calculating the <span class="green">perimeter</span> for <span class="pink">rectangular shapes</span></h1>
+  <p class="lead">We are learning to calculate the perimeter of rectangles using familiar metric units, and to solve practical problems.</p>
+
+  <div class="card">
+    <div class="part-tag" style="margin-bottom:12px">Success criteria</div>
+    <div class="reflect" id="criteriaList"></div>
+  </div>
+</div>
+
+<!-- BIG IDEA 1 -->
+<section id="learn" class="wrap">
+  <div class="part-tag">Big idea 1</div>
+  <h2>What is perimeter?</h2>
+  <div class="card define">
+    <b>Perimeter</b> is the distance all the way around the outside edge of a shape. You find it by adding the length of every side.
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3 style="margin-top:0">Walk around the edge</h3>
+    <p style="margin:0 0 4px">Click <b>Take a step</b> to walk around the rectangle one side at a time, and watch the running total build up. That total is the perimeter.</p>
+
+    <div class="walkbox">
+      <div class="walkstage" id="walkStage"></div>
+      <div class="walkreadout" id="walkOut"></div>
+      <div class="btnrow" style="justify-content:center">
+        <button class="btn sm" id="walkStep">Take a step</button>
+        <button class="btn sm ghost" id="walkReset">Start again</button>
+      </div>
+    </div>
+
+    <div class="teacher-note"><span class="pill">Teacher</span><b>Say it out loud.</b> Ask students to chant the running total with each click: "3, then 5, then 8, then 10." Landing back on the starting corner is the moment to name it as the perimeter.</div>
+  </div>
+
+  <div class="two" style="margin-top:18px">
+    <div class="card">
+      <h4 style="margin-top:0">A square</h4>
+      <div id="egSquare"></div>
+      <p style="margin:8px 0 0">All four sides are equal. 2 + 2 + 2 + 2 = <b>8 cm</b></p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">A rectangle</h4>
+      <div id="egRect"></div>
+      <p style="margin:8px 0 0">Opposite sides are equal. 3 + 2 + 3 + 2 = <b>10 cm</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- BIG IDEA 2: FORMULA -->
+<section id="formula" class="wrap">
+  <div class="part-tag">Big idea 2</div>
+  <h2>A faster way: the formula</h2>
+  <div class="card define">
+    Because opposite sides of a rectangle are equal, you only need <b>two</b> measurements. Add the length and the width, then double it.
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="formula-strip">
+      <span class="fx">Perimeter = 2 &times; ( <span class="lit">length</span> + <span class="lit">width</span> )</span>
+    </div>
+    <p style="margin:0">A <span class="keyword">square</span> is a special rectangle where the length and the width are the same, so you can also do side &times; 4.</p>
+    <p class="hintline">Units you will use: mm, cm, m, and km. Always write the unit in your answer.</p>
+  </div>
+
+  <div class="card builder" style="margin-top:18px">
+    <div class="buildhead"><span class="spark">📏</span><h3 style="margin:0">Build your own rectangle</h3></div>
+    <p style="margin:0 0 12px">Drag the sliders to change the length and the width. Watch how the perimeter changes, and see the working written out for you.</p>
+
+    <div class="slrow">
+      <span class="s-lab">Length</span>
+      <input type="range" class="slider" id="bLen" min="1" max="14" step="1" value="8" aria-label="Length in centimetres">
+      <span class="s-val" id="bLenV">8 cm</span>
+    </div>
+    <div class="slrow">
+      <span class="s-lab">Width</span>
+      <input type="range" class="slider" id="bWid" min="1" max="14" step="1" value="5" aria-label="Width in centimetres">
+      <span class="s-val" id="bWidV">5 cm</span>
+    </div>
+
+    <div style="display:flex; justify-content:center; margin:14px 0 6px" id="bShape"></div>
+    <div class="buildout">
+      <span class="bo-eq" id="bWork"></span>
+    </div>
+
+    <div class="teacher-note"><span class="pill">Teacher</span><b>Ask the noticing question.</b> Set the length to 8 and slide the width from 1 to 8. Students should notice the shape becomes a square exactly when length and width match, and that adding 1 to the width adds 2 to the perimeter, not 1.</div>
+  </div>
+</section>
+
+<!-- QUICK CHECK -->
+<section id="check" class="wrap">
+  <div class="part-tag">Quick check</div>
+  <h2>Perimeter or area?</h2>
+  <div class="card">
+    <p style="margin:0 0 12px">Perimeter goes <b>around the edge</b>. Area <b>covers the inside</b>. Decide which one each job needs.</p>
+    <div id="sortList"></div>
+    <div class="teacher-note"><span class="pill">Teacher</span><b>Thumbs version.</b> This also runs as the original whole-class routine: read each one aloud, thumbs up for perimeter, thumbs down for area. Use the board version first, then let students confirm on screen.</div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3 style="margin-top:0">Spot the mistake</h3>
+    <p style="margin:0 0 4px">A rectangle is 8 cm by 4 cm. Two students worked out the perimeter. Click whoever you think is correct.</p>
+    <div class="mistake" id="mistakeBox">
+      <button class="stu" data-who="a">
+        <span class="who">Student A</span>
+        <span class="work">8 &times; 4 = 32 cm</span>
+      </button>
+      <button class="stu" data-who="b">
+        <span class="who">Student B</span>
+        <span class="work">8 + 4 = 12, then 12 &times; 2 = 24 cm</span>
+      </button>
+    </div>
+    <p class="mistake-fb" id="mistakeFb"></p>
+    <div class="teacher-note"><span class="pill">Teacher</span><b>Name the error.</b> Student A has found the <i>area</i>, not the perimeter. Push for the reason, not just the answer: multiplying length by width fills the inside, while perimeter only travels the boundary.</div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATED PRACTICE -->
+<section id="practice" class="wrap">
+  <div class="part-tag">Differentiated practice</div>
+  <h2>Must Complete Work</h2>
+
+  <div class="filterbar">
+    <span class="lbl">Show tier:</span>
+    <button class="chip on" data-f="all"><span class="lt"></span>All</button>
+    <button class="chip" data-f="green"><span class="lt"></span>Green</button>
+    <button class="chip" data-f="amber"><span class="lt"></span>Amber</button>
+    <button class="chip" data-f="red"><span class="lt"></span>Red</button>
+  </div>
+
+  <!-- GREEN -->
+  <div class="activity" data-tier="green">
+    <div class="head"><span class="tier">🟢 Green</span> Understanding &amp; fluency <span class="tag">Both measurements given</span></div>
+    <div class="body">
+      <div class="scenario">
+        <h4>Calculate the perimeter of each rectangle</h4>
+        <p class="muted" style="margin:0 0 10px">Add the length and the width, then double it. The dashes on the sides show you which sides are equal.</p>
+        <div class="shapegrid" id="greenShapes"></div>
+      </div>
+      <div class="scenario">
+        <h4>Type each perimeter, then press Check</h4>
+        <div id="greenQuiz"></div>
+      </div>
+      <div class="btnrow"><button class="btn sm reveal" data-target="ansGreen">Reveal answers</button></div>
+      <div class="answer" id="ansGreen"><div class="inner">
+        <h5>✓ Answers</h5>
+        <ul>
+          <li><b>a</b> 8 cm by 6 cm: 2 &times; (8 + 6) = 2 &times; 14 = <b>28 cm</b></li>
+          <li><b>b</b> 5 cm by 7 cm: 2 &times; (5 + 7) = 2 &times; 12 = <b>24 cm</b></li>
+          <li><b>c</b> 12 cm by 4 cm: 2 &times; (12 + 4) = 2 &times; 16 = <b>32 cm</b></li>
+          <li><b>d</b> 15 m by 9 m: 2 &times; (15 + 9) = 2 &times; 24 = <b>48 m</b></li>
+          <li><b>e</b> 18 cm by 7 cm: 2 &times; (18 + 7) = 2 &times; 25 = <b>50 cm</b></li>
+          <li><b>f</b> 7 m by 8 m: 2 &times; (7 + 8) = 2 &times; 15 = <b>30 m</b></li>
+        </ul>
+      </div></div>
+      <div class="teacher-note"><span class="pill">Teacher</span><b>Watch the units.</b> Questions d and f are in metres while the rest are centimetres. Students who write "48 cm" have stopped reading the diagram. Also watch for students doubling only one measurement.</div>
+    </div>
+  </div>
+
+  <!-- AMBER -->
+  <div class="activity" data-tier="amber">
+    <div class="head"><span class="tier">🟠 Amber</span> Reasoning <span class="tag">Working backwards</span></div>
+    <div class="body">
+      <div class="scenario">
+        <h4>Part 1: Calculate each perimeter</h4>
+        <p class="muted" style="margin:0 0 10px">These rectangles are drawn at different angles and sizes. Only two measurements are given, so use the formula.</p>
+        <div class="shapegrid" id="amberShapes"></div>
+      </div>
+      <div class="scenario">
+        <h4>Type each perimeter, then press Check</h4>
+        <div id="amberQuiz"></div>
+      </div>
+
+      <div class="scenario">
+        <h4>Part 2: Working backwards</h4>
+        <p class="muted" style="margin:0 0 6px">Now you know the perimeter and you need a missing side. Undo the steps.</p>
+        <div class="define" style="background:#fff; border-color:var(--amber); border-left-color:var(--amber); font-size:.98rem">
+          <b style="color:var(--amber)">Worked example.</b> A rectangle has a perimeter of 22 cm and a width of 4 cm. How long is it?<br>
+          In Green you added the two measurements, then doubled. Now you undo that.<br>
+          22 &divide; 2 = 11, so length + width = 11.<br>
+          11 &minus; 4 = 7. The length is <b>7 cm</b>.
+        </div>
+        <div id="backQuiz" style="margin-top:14px"></div>
+      </div>
+
+      <div class="scenario">
+        <h4>Part 3: Draw your own</h4>
+        <p class="muted" style="margin:0 0 10px">Using a ruler, draw and label three <b>different</b> rectangles in your maths book that each have a perimeter of 24 cm. Type each one here to check it before you draw.</p>
+        <div class="drawgrid" id="drawGrid"></div>
+      </div>
+
+      <div class="btnrow"><button class="btn sm reveal" data-target="ansAmber">Reveal answers</button></div>
+      <div class="answer" id="ansAmber"><div class="inner">
+        <h5>✓ Answers</h5>
+        <ul>
+          <li><b>a</b> 16 cm by 2 cm: 2 &times; 18 = <b>36 cm</b></li>
+          <li><b>b</b> 10 cm by 4 cm: 2 &times; 14 = <b>28 cm</b></li>
+          <li><b>c</b> 11 cm by 3 cm: 2 &times; 14 = <b>28 cm</b></li>
+          <li><b>d</b> 20 cm by 5 cm: 2 &times; 25 = <b>50 cm</b></li>
+          <li><b>e</b> 12 cm by 10 cm: 2 &times; 22 = <b>44 cm</b></li>
+          <li><b>Same perimeter:</b> rectangles <b>b and c</b>, both 28 cm, even though they are different shapes.</li>
+          <li><b>Square, perimeter 36 cm:</b> 36 &divide; 4 = <b>9 cm</b> on each side.</li>
+          <li><b>Perimeter 30 cm, width 5 cm:</b> 30 &divide; 2 = 15, then 15 &minus; 5 = <b>10 cm</b>.</li>
+          <li><b>Perimeter 24 cm, one side 9 cm:</b> the opposite side is also 9 cm. 24 &divide; 2 = 12, then 12 &minus; 9 = 3, so the other three sides are <b>9 cm, 3 cm, and 3 cm</b>.</li>
+          <li><b>Perimeter 24 cm rectangles:</b> any pair that adds to 12, such as 11 and 1, 10 and 2, 9 and 3, 8 and 4, or 7 and 5.</li>
+        </ul>
+      </div></div>
+      <div class="teacher-note"><span class="pill">Teacher</span><b>The halving step is the hurdle.</b> Many students subtract the known side from the full perimeter first. Insist on halving before subtracting, and have them check by adding all four sides back up. Rectangles b and c are the matched pair at 28 cm, which is a good prompt for "same perimeter does not mean same shape".</div>
+    </div>
+  </div>
+
+  <!-- RED -->
+  <div class="activity" data-tier="red">
+    <div class="head"><span class="tier">🔴 Red</span> Problem solving <span class="tag">Worded problems</span></div>
+    <div class="body">
+      <p class="muted" style="margin:0 0 12px">Read each problem carefully and show your working in your maths book. Decide first whether you are finding a perimeter or a missing side.</p>
+
+      <div class="scenario">
+        <h4>1. Rabbit enclosure</h4>
+        <p style="margin:0">Mrs Staples is building a rectangular rabbit enclosure. The enclosure measures 4 m by 5 m. How many metres of fence does she need?</p>
+      </div>
+      <div class="scenario">
+        <h4>2. Playground</h4>
+        <p style="margin:0">The perimeter of a rectangular playground is 36 m. If the length of the park is 6 m, what is the width of the park?</p>
+      </div>
+      <div class="scenario">
+        <h4>3. Year 5 vegetable garden</h4>
+        <p style="margin:0 0 6px">The Year 5 vegetable garden is a rectangle 8 m long and 3 m wide. The gardening club wants to run a low timber edge all the way around the outside.</p>
+        <ol class="qlist" type="a">
+          <li>How many metres of timber edging will they need?</li>
+          <li>Timber edging costs $12 per metre. What will the edging cost altogether?</li>
+        </ol>
+      </div>
+      <div class="scenario">
+        <h4>4. How many possibilities?</h4>
+        <p style="margin:0">A rectangular garden has a perimeter of 20 metres. Its length is longer than its width. The length and width are both a whole number of metres. What could the length and width of the garden be? Can you find all possibilities?</p>
+        <p class="hintline">There is more than one answer. Work through the widths in order so you do not miss any.</p>
+      </div>
+
+      <div class="scenario">
+        <h4>Type each answer, then press Check</h4>
+        <div id="redQuiz"></div>
+      </div>
+
+      <div class="btnrow"><button class="btn sm reveal" data-target="ansRed">Reveal answers</button></div>
+      <div class="answer" id="ansRed"><div class="inner">
+        <h5>✓ Answers</h5>
+        <ul>
+          <li><b>1. Rabbit enclosure:</b> 2 &times; (5 + 4) = 2 &times; 9 = <b>18 m</b> of fence.</li>
+          <li><b>2. Playground:</b> 36 &divide; 2 = 18, then 18 &minus; 6 = <b>12 m</b> wide.</li>
+          <li><b>3a. Timber edging:</b> 2 &times; (8 + 3) = 2 &times; 11 = <b>22 m</b>.</li>
+          <li><b>3b. Cost:</b> 22 &times; $12 = <b>$264</b>.</li>
+          <li><b>4. All possibilities:</b> the length and width must add to 10, so there are <b>4</b> of them: 9 m by 1 m, 8 m by 2 m, 7 m by 3 m, and 6 m by 4 m. 5 m by 5 m is left out because that is a square, so the length would not be longer than the width.</li>
+        </ul>
+      </div></div>
+      <div class="teacher-note"><span class="pill">Teacher</span><b>Question 4 is the stretch.</b> The proof that there are exactly four is the real learning, not the list. Ask how they know they have found them all, and look for students who work systematically from a width of 1 upwards. The 5 by 5 case is worth a whole-class discussion, since it hinges on "longer than", not "at least as long as".</div>
+    </div>
+  </div>
+</section>
+
+<!-- REFLECTION -->
+<section id="exit" class="wrap">
+  <div class="part-tag">Reflection &middot; how did you go?</div>
+  <h2>Check yourself</h2>
+  <div class="card">
+    <div class="reflect" id="reflectList"></div>
+    <div class="talk"><b>Talk to your partner:</b> two rectangles can have the same perimeter but look completely different. Explain how that is possible, using the words &ldquo;length&rdquo;, &ldquo;width&rdquo;, and &ldquo;perimeter&rdquo;.</div>
+  </div>
+</section>
+
+<!-- EXIT TICKET -->
+<section id="exitticket" class="wrap">
+  <div class="part-tag">Exit ticket</div>
+  <h2>Your exit ticket</h2>
+  <div class="card">
+    <p class="lead" style="margin:0 0 6px">Have you marked all your tasks? If not, go back and mark your work first. Once you have finished and marked, click the link below to complete your exit ticket.</p>
+    <div class="btnrow"><a class="btn" href="#" target="_blank" rel="noopener">Open exit ticket &#8599;</a></div>
+    <p class="hintline">Replace this link with your Mathspace exit ticket URL.</p>
+  </div>
+</section>
+
+<footer class="wrap">
+  5.2 Calculating the perimeter for rectangular shapes &middot; Calculating perimeter and solving practical problems
+  <div class="curric">Aligned to Victorian Curriculum 2.0 &middot; Measurement</div>
+  <div style="margin-top:12px">
+    <a class="curric-link" href="https://f10.vcaa.vic.edu.au/learning-areas/mathematics/curriculum?level=5#VC2M5M02" target="_blank" rel="noopener">VC2M5M02 &mdash; perimeter &amp; area of shapes &#8599;</a>
+    <a class="curric-link" href="https://f10.vcaa.vic.edu.au/learning-areas/mathematics/curriculum?level=5#VC2M5M01" target="_blank" rel="noopener">VC2M5M01 &mdash; choosing metric units &#8599;</a>
+    <a class="curric-link" href="https://f10.vcaa.vic.edu.au/learning-areas/mathematics/curriculum?level=5" target="_blank" rel="noopener">All Level 5 Mathematics &#8599;</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const SVGNS='http://www.w3.org/2000/svg';
+  const STROKE='#3E5BC4';
+
+  /* ---------- rectangle drawing ---------- */
+  function rectSVG(L, W, unit, opts){
+    opts = opts || {};
+    const maxPx = opts.max || 120;
+    const s = maxPx / Math.max(L, W);
+    const w = Math.max(L*s, 22), h = Math.max(W*s, 22);
+    const padX = 40, padY = 30;
+    const vw = w + padX*2, vh = h + padY*2;
+    const x = padX, y = padY;
+
+    const svg=document.createElementNS(SVGNS,'svg');
+    svg.setAttribute('viewBox','0 0 '+vw+' '+vh);
+    svg.setAttribute('width', Math.min(vw, 250));
+    svg.setAttribute('role','img');
+    svg.setAttribute('aria-label','Rectangle '+L+' by '+W+' '+unit);
+
+    const r=document.createElementNS(SVGNS,'rect');
+    r.setAttribute('x',x); r.setAttribute('y',y);
+    r.setAttribute('width',w); r.setAttribute('height',h);
+    r.setAttribute('fill', opts.fill || 'none');
+    r.setAttribute('stroke',STROKE); r.setAttribute('stroke-width','2.5');
+    svg.appendChild(r);
+
+    function tick(cx,cy,vertical,offset){
+      const t=document.createElementNS(SVGNS,'line');
+      const len=5;
+      if(vertical){ t.setAttribute('x1',cx-len); t.setAttribute('x2',cx+len); t.setAttribute('y1',cy+offset); t.setAttribute('y2',cy+offset); }
+      else { t.setAttribute('y1',cy-len); t.setAttribute('y2',cy+len); t.setAttribute('x1',cx+offset); t.setAttribute('x2',cx+offset); }
+      t.setAttribute('stroke','#1B2A5E'); t.setAttribute('stroke-width','2.5');
+      svg.appendChild(t);
+    }
+    if(opts.ticks!==false){
+      tick(x+w/2, y, false, 0); tick(x+w/2, y+h, false, 0);
+      tick(x, y+h/2, true, -2.5); tick(x, y+h/2, true, 2.5);
+      tick(x+w, y+h/2, true, -2.5); tick(x+w, y+h/2, true, 2.5);
+    }
+    function label(tx,ty,text,anchor){
+      const t=document.createElementNS(SVGNS,'text');
+      t.setAttribute('x',tx); t.setAttribute('y',ty);
+      t.setAttribute('text-anchor',anchor||'middle');
+      t.setAttribute('font-family',"'Nunito', sans-serif");
+      t.setAttribute('font-size','14'); t.setAttribute('font-weight','700');
+      t.setAttribute('fill','#8a4b12');
+      t.textContent=text; svg.appendChild(t);
+    }
+    label(x+w/2, y-10, L+' '+unit);
+    label(x-8, y+h/2+5, W+' '+unit, 'end');
+    return svg;
+  }
+
+  function mountShapes(mountId, list, unitDefault){
+    const m=document.getElementById(mountId); if(!m) return;
+    list.forEach(item=>{
+      const cell=document.createElement('div'); cell.className='shapecell';
+      const lab=document.createElement('span'); lab.className='slab'; lab.textContent=item.id;
+      cell.appendChild(lab);
+      cell.appendChild(rectSVG(item.L, item.W, item.unit||unitDefault, {max:item.max||110}));
+      m.appendChild(cell);
+    });
+  }
+
+  /* ---------- example shapes ---------- */
+  document.getElementById('egSquare').appendChild(rectSVG(2,2,'cm',{max:90, fill:'#EAE9FF'}));
+  document.getElementById('egRect').appendChild(rectSVG(3,2,'cm',{max:110, fill:'#EAE9FF'}));
+
+  /* ---------- perimeter walker ---------- */
+  (function(){
+    const L=3, W=2, unit='cm';
+    const sides=[L,W,L,W];
+    let step=0;
+    const stage=document.getElementById('walkStage');
+    const out=document.getElementById('walkOut');
+    const btn=document.getElementById('walkStep');
+    const rst=document.getElementById('walkReset');
+
+    function render(){
+      stage.innerHTML='';
+      const maxPx=150, s=maxPx/Math.max(L,W);
+      const w=L*s, h=W*s, padX=48, padY=40;
+      const svg=document.createElementNS(SVGNS,'svg');
+      svg.setAttribute('viewBox','0 0 '+(w+padX*2)+' '+(h+padY*2));
+      svg.setAttribute('width', Math.min(w+padX*2, 340));
+      const x=padX, y=padY;
+
+      const base=document.createElementNS(SVGNS,'rect');
+      base.setAttribute('x',x); base.setAttribute('y',y);
+      base.setAttribute('width',w); base.setAttribute('height',h);
+      base.setAttribute('fill','#F6F8FC'); base.setAttribute('stroke','#CFDAEC'); base.setAttribute('stroke-width','3');
+      svg.appendChild(base);
+
+      const pts=[[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]];
+      const cols=['#16A34A','#4F46E5','#DB2777','#F0862E'];
+      for(let i=0;i<step;i++){
+        const ln=document.createElementNS(SVGNS,'line');
+        ln.setAttribute('x1',pts[i][0]); ln.setAttribute('y1',pts[i][1]);
+        ln.setAttribute('x2',pts[i+1][0]); ln.setAttribute('y2',pts[i+1][1]);
+        ln.setAttribute('stroke',cols[i]); ln.setAttribute('stroke-width','6'); ln.setAttribute('stroke-linecap','round');
+        svg.appendChild(ln);
+        const t=document.createElementNS(SVGNS,'text');
+        const mx=(pts[i][0]+pts[i+1][0])/2, my=(pts[i][1]+pts[i+1][1])/2;
+        t.setAttribute('x', i===1? mx+22 : i===3? mx-22 : mx);
+        t.setAttribute('y', i===0? my-12 : i===2? my+22 : my+5);
+        t.setAttribute('text-anchor','middle');
+        t.setAttribute('font-family',"'Nunito', sans-serif"); t.setAttribute('font-size','15'); t.setAttribute('font-weight','800');
+        t.setAttribute('fill',cols[i]); t.textContent=sides[i]+' '+unit;
+        svg.appendChild(t);
+      }
+      const dot=document.createElementNS(SVGNS,'circle');
+      dot.setAttribute('cx',pts[step][0]); dot.setAttribute('cy',pts[step][1]); dot.setAttribute('r','7');
+      dot.setAttribute('fill','#fff'); dot.setAttribute('stroke','#18233F'); dot.setAttribute('stroke-width','3');
+      svg.appendChild(dot);
+      stage.appendChild(svg);
+
+      const done=sides.slice(0,step);
+      const total=done.reduce((a,b)=>a+b,0);
+      if(step===0){ out.innerHTML='<span class="muted" style="font-weight:600">Start at the corner and take your first step.</span>'; }
+      else if(step<4){ out.innerHTML='<span>'+done.join(' + ')+'</span><span class="sum">'+total+' '+unit+' so far</span>'; }
+      else { out.innerHTML='<span>'+done.join(' + ')+' = </span><span class="sum">'+total+' '+unit+'</span><span class="done">&#10003; back at the start, so the perimeter is '+total+' '+unit+'</span>'; }
+      btn.disabled = step>=4;
+      btn.textContent = step>=4 ? 'All the way around' : 'Take a step';
+    }
+    btn.addEventListener('click',()=>{ if(step<4){ step++; render(); }});
+    rst.addEventListener('click',()=>{ step=0; render(); });
+    render();
+  })();
+
+  /* ---------- builder ---------- */
+  (function(){
+    const len=document.getElementById('bLen'), wid=document.getElementById('bWid');
+    const lenV=document.getElementById('bLenV'), widV=document.getElementById('bWidV');
+    const shape=document.getElementById('bShape'), work=document.getElementById('bWork');
+    function setFill(el){ const min=+el.min, max=+el.max; el.style.setProperty('--fill', ((el.value-min)/(max-min)*100)+'%'); }
+    function render(){
+      const L=+len.value, W=+wid.value;
+      lenV.textContent=L+' cm'; widV.textContent=W+' cm';
+      const P=2*(L+W);
+      shape.innerHTML=''; shape.appendChild(rectSVG(L,W,'cm',{max:130, fill:'#EAE9FF'}));
+      const isSq = L===W;
+      work.innerHTML='2 &times; ('+L+' + '+W+') = 2 &times; '+(L+W)+' = <b>'+P+' cm</b>'+(isSq?' &nbsp;<span style="color:var(--c-green)">(that is a square!)</span>':'');
+    }
+    [len,wid].forEach(el=>{ el.addEventListener('input',()=>{ setFill(el); render(); }); setFill(el); });
+    render();
+  })();
+
+  /* ---------- perimeter or area sorter ---------- */
+  (function(){
+    const items=[
+      {t:'Putting a fence around a garden', a:'perimeter', why:'The fence travels around the edge.'},
+      {t:'Measuring the distance around a swimming pool', a:'perimeter', why:'"Around" is the clue word.'},
+      {t:'Finding the distance around a picture frame', a:'perimeter', why:'The frame is the boundary of the picture.'},
+      {t:'Finding how much carpet covers a room', a:'area', why:'Carpet fills the whole floor, so that is area.'},
+      {t:'Working out how much skirting board to buy for a bedroom', a:'perimeter', why:'Skirting board runs along the walls, around the edge.'},
+      {t:'Working out how much paint to cover a wall', a:'area', why:'Paint covers the surface, so that is area.'}
+    ];
+    const mount=document.getElementById('sortList');
+    items.forEach(it=>{
+      const row=document.createElement('div'); row.className='sortrow';
+      const txt=document.createElement('span'); txt.className='s-txt'; txt.textContent=it.t;
+      const btns=document.createElement('span'); btns.className='s-btns';
+      const fb=document.createElement('p'); fb.className='s-fb';
+      ['perimeter','area'].forEach(choice=>{
+        const b=document.createElement('button');
+        b.textContent = choice==='perimeter' ? '👍 Perimeter' : '👎 Area';
+        b.addEventListener('click',()=>{
+          btns.querySelectorAll('button').forEach(x=>x.classList.remove('picked'));
+          b.classList.add('picked');
+          row.classList.remove('correct','wrong');
+          if(choice===it.a){ row.classList.add('correct'); fb.textContent='✓ '+it.why; }
+          else { row.classList.add('wrong'); fb.textContent='Not quite. Think about whether you go around the edge or cover the inside.'; }
+        });
+        btns.appendChild(b);
+      });
+      row.appendChild(txt); row.appendChild(btns); row.appendChild(fb);
+      mount.appendChild(row);
+    });
+  })();
+
+  /* ---------- spot the mistake ---------- */
+  (function(){
+    const box=document.getElementById('mistakeBox'), fb=document.getElementById('mistakeFb');
+    box.querySelectorAll('.stu').forEach(b=>{
+      b.addEventListener('click',()=>{
+        box.querySelectorAll('.stu').forEach(x=>x.classList.remove('right','wrongpick'));
+        if(b.dataset.who==='b'){
+          b.classList.add('right'); fb.className='mistake-fb good';
+          fb.innerHTML='✓ Student B is correct. 2 × (8 + 4) = 24 cm. Student A multiplied instead, which gives the <b>area</b>, not the perimeter.';
+        } else {
+          b.classList.add('wrongpick'); fb.className='mistake-fb bad';
+          fb.innerHTML='Not quite. 8 × 4 = 32 covers the inside of the rectangle, so that is the <b>area</b>. Perimeter only travels around the edge.';
+        }
+      });
+    });
+  })();
+
+  /* ---------- reusable type-in answer quiz ---------- */
+  function makeAnswerQuiz(mountId, quiz, winMsg){
+    const qmount=document.getElementById(mountId);
+    if(!qmount) return;
+    function correct(item,v){
+      const s=v.trim().toLowerCase().replace(/\s+/g,'');
+      if(item.type==='number') return Number(v)===item.a;
+      if(item.type==='pair'){
+        const m=s.match(/\d+/g)||[];
+        return m.length===2 && [...m].map(Number).sort((x,y)=>x-y).join(',')===item.a.slice().sort((x,y)=>x-y).join(',');
+      }
+      return (Array.isArray(item.a)?item.a:[item.a]).some(x=>String(x).toLowerCase().replace(/\s+/g,'')===s);
+    }
+    const genericWrong={
+      number:'Not quite. Check your working, then try again.',
+      pair:'Not quite. Write both measurements, such as "9 and 3".',
+      text:'Not quite. Read the question again carefully.'
+    };
+    const state=quiz.map(it=>it.type==='open'?null:false);
+    const overall=document.createElement('div'); overall.className='qc-overall';
+    function updateOverall(){
+      const checkable=state.filter(s=>s!==null);
+      if(checkable.length && checkable.every(Boolean)){ overall.className='qc-overall win'; overall.textContent=winMsg||'🎉 All correct!'; }
+      else { overall.className='qc-overall'; overall.textContent=''; }
+    }
+    quiz.forEach((item,i)=>{
+      const row=document.createElement('div'); row.className='qcheck';
+      const num=document.createElement('span'); num.className='qc-num'; num.textContent=item.n||(i+1);
+      const txt=document.createElement('span'); txt.className='qc-text'; txt.textContent=item.q;
+      row.appendChild(num); row.appendChild(txt);
+
+      if(item.type==='open'){
+        const ta=document.createElement('textarea'); ta.className='qc-open';
+        ta.placeholder=item.placeholder||'Write your answer and your reason…';
+        ta.setAttribute('aria-label',item.q);
+        row.appendChild(ta); qmount.appendChild(row); return;
+      }
+
+      const input=document.createElement('input');
+      if(item.type==='number'){ input.type='number'; input.min='0'; input.placeholder='?'; }
+      else { input.type='text'; input.className='txt'; input.placeholder=item.placeholder||'type…'; }
+      input.setAttribute('aria-label',item.q);
+      const unit=document.createElement('span'); unit.className='unit'; unit.textContent=item.unit||'';
+      const btn=document.createElement('button'); btn.className='btn sm'; btn.textContent='Check';
+      const fb=document.createElement('span'); fb.className='qc-fb';
+      function check(){
+        if(input.value.trim()==='') return;
+        if(correct(item,input.value)){ row.classList.remove('wrong'); row.classList.add('correct'); fb.textContent='✓ Correct! '+(item.work||''); state[i]=true; }
+        else { row.classList.remove('correct'); row.classList.add('wrong'); fb.textContent=item.wrong||genericWrong[item.type]; state[i]=false; }
+        updateOverall();
+      }
+      btn.addEventListener('click',check);
+      input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); check(); } });
+      input.addEventListener('input',()=>{ row.classList.remove('correct','wrong'); fb.textContent=''; state[i]=false; updateOverall(); });
+      const ans=document.createElement('div'); ans.className='qc-answer';
+      ans.appendChild(input); if(item.unit) ans.appendChild(unit); ans.appendChild(btn);
+      row.appendChild(ans); row.appendChild(fb);
+      qmount.appendChild(row);
+    });
+    qmount.appendChild(overall);
+  }
+
+  /* ---------- GREEN ---------- */
+  const greenData=[
+    {id:'a', L:8,  W:6, unit:'cm', P:28},
+    {id:'b', L:5,  W:7, unit:'cm', P:24},
+    {id:'c', L:12, W:4, unit:'cm', P:32},
+    {id:'d', L:15, W:9, unit:'m',  P:48},
+    {id:'e', L:18, W:7, unit:'cm', P:50},
+    {id:'f', L:7,  W:8, unit:'m',  P:30}
+  ];
+  mountShapes('greenShapes', greenData, 'cm');
+  makeAnswerQuiz('greenQuiz', greenData.map(d=>({
+    n:d.id, q:'Rectangle '+d.id+': '+d.L+' '+d.unit+' by '+d.W+' '+d.unit,
+    a:d.P, type:'number', unit:d.unit,
+    work:'2 × ('+d.L+' + '+d.W+') = '+d.P+' '+d.unit+'.',
+    wrong:'Not quite. Add '+d.L+' + '+d.W+' first, then double your answer. Remember the unit is '+d.unit+'.'
+  })), '🎉 All six correct! You are using the formula well.');
+
+  /* ---------- AMBER ---------- */
+  const amberData=[
+    {id:'a', L:16, W:2,  unit:'cm', P:36},
+    {id:'b', L:10, W:4,  unit:'cm', P:28},
+    {id:'c', L:11, W:3,  unit:'cm', P:28},
+    {id:'d', L:20, W:5,  unit:'cm', P:50},
+    {id:'e', L:12, W:10, unit:'cm', P:44}
+  ];
+  mountShapes('amberShapes', amberData, 'cm');
+  const amberQuiz=amberData.map(d=>({
+    n:d.id, q:'Rectangle '+d.id+': '+d.L+' cm by '+d.W+' cm',
+    a:d.P, type:'number', unit:'cm',
+    work:'2 × ('+d.L+' + '+d.W+') = '+d.P+' cm.',
+    wrong:'Not quite. Add '+d.L+' + '+d.W+' first, then double it.'
+  }));
+  amberQuiz.push({
+    n:'?', q:'Two of these rectangles have the same perimeter. Which two?',
+    a:['bandc','candb','b,c','c,b','bc','cb'], type:'text', placeholder:'e.g. a and d',
+    work:'b and c are both 28 cm, even though one is 10 by 4 and the other is 11 by 3.',
+    wrong:'Not quite. Work out all five perimeters first, then look for the matching pair.'
+  });
+  makeAnswerQuiz('amberQuiz', amberQuiz, '🎉 All correct, including the matching pair!');
+
+  makeAnswerQuiz('backQuiz', [
+    {q:'A square has a perimeter of 36 cm. How long is each side?', a:9, type:'number', unit:'cm',
+     work:'A square has 4 equal sides, so 36 ÷ 4 = 9 cm.',
+     wrong:'Not quite. A square has four equal sides, so divide the perimeter by 4.'},
+    {q:'A rectangle has a perimeter of 30 cm. Its width is 5 cm. How long is it?', a:10, type:'number', unit:'cm',
+     work:'30 ÷ 2 = 15, then 15 − 5 = 10 cm.',
+     wrong:'Not quite. Halve the perimeter first to get length + width, then subtract the width.'},
+    {q:'A rectangle has a perimeter of 24 cm. One of its sides is 9 cm. What are the other three sides?',
+     a:[9,3], type:'pair', placeholder:'e.g. 9 and 3',
+     work:'The opposite side is also 9 cm. 24 ÷ 2 = 12, then 12 − 9 = 3, so the sides are 9 cm, 3 cm, and 3 cm.',
+     wrong:'Not quite. The side opposite the 9 cm side is also 9 cm. Halve the perimeter, then subtract 9.'}
+  ], '🎉 Excellent working backwards!');
+
+  /* ---------- draw your own, perimeter 24 ---------- */
+  (function(){
+    const grid=document.getElementById('drawGrid');
+    const used=[];
+    for(let i=0;i<3;i++){
+      const cell=document.createElement('div'); cell.className='drawcell';
+      const h=document.createElement('h5'); h.textContent='Rectangle '+(i+1);
+      const row=document.createElement('div'); row.className='dc-in';
+      const li=document.createElement('input'); li.type='number'; li.min='1'; li.placeholder='L'; li.setAttribute('aria-label','Rectangle '+(i+1)+' length');
+      const wi=document.createElement('input'); wi.type='number'; wi.min='1'; wi.placeholder='W'; wi.setAttribute('aria-label','Rectangle '+(i+1)+' width');
+      const by=document.createElement('span'); by.className='unit'; by.textContent='cm by';
+      const cm=document.createElement('span'); cm.className='unit'; cm.textContent='cm';
+      const btn=document.createElement('button'); btn.className='btn sm'; btn.textContent='Check';
+      const fb=document.createElement('p'); fb.className='dc-fb';
+      const vis=document.createElement('div'); vis.className='dc-svg';
+      row.appendChild(li); row.appendChild(by); row.appendChild(wi); row.appendChild(cm); row.appendChild(btn);
+      cell.appendChild(h); cell.appendChild(row); cell.appendChild(fb); cell.appendChild(vis);
+      grid.appendChild(cell);
+
+      function check(){
+        const L=Number(li.value), W=Number(wi.value);
+        vis.innerHTML=''; cell.classList.remove('ok','no');
+        if(!L || !W || L<1 || W<1){ cell.classList.add('no'); fb.textContent='Type a length and a width first.'; return; }
+        const P=2*(L+W);
+        if(P!==24){ cell.classList.add('no'); fb.textContent='That gives 2 × ('+L+' + '+W+') = '+P+' cm. You need the two numbers to add to 12.'; return; }
+        const key=[L,W].sort((a,b)=>a-b).join('x');
+        if(used[i]!==key && used.includes(key)){ cell.classList.add('no'); fb.textContent='That one is already used. Find a different pair that adds to 12.'; return; }
+        used[i]=key; cell.classList.add('ok');
+        fb.textContent='✓ 2 × ('+L+' + '+W+') = 24 cm. Now draw it with your ruler.';
+        vis.appendChild(rectSVG(L,W,'cm',{max:92, fill:'#E7F6EC'}));
+      }
+      btn.addEventListener('click',check);
+      [li,wi].forEach(inp=>{
+        inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); check(); }});
+        inp.addEventListener('input',()=>{ cell.classList.remove('ok','no'); fb.textContent=''; vis.innerHTML=''; used[i]=null; });
+      });
+    }
+  })();
+
+  /* ---------- RED ---------- */
+  makeAnswerQuiz('redQuiz', [
+    {n:'1', q:'Rabbit enclosure: how many metres of fence?', a:18, type:'number', unit:'m',
+     work:'2 × (5 + 4) = 18 m.',
+     wrong:'Not quite. Add the two measurements, 5 + 4, then double it.'},
+    {n:'2', q:'Playground: what is the width?', a:12, type:'number', unit:'m',
+     work:'36 ÷ 2 = 18, then 18 − 6 = 12 m.',
+     wrong:'Not quite. Halve the perimeter first, then subtract the length.'},
+    {n:'3a', q:'Vegetable garden: how many metres of timber edging?', a:22, type:'number', unit:'m',
+     work:'2 × (8 + 3) = 22 m.',
+     wrong:'Not quite. Add 8 + 3 first, then double it.'},
+    {n:'3b', q:'Vegetable garden: what is the total cost at $12 per metre?', a:264, type:'number', unit:'$',
+     work:'22 × $12 = $264.',
+     wrong:'Not quite. Multiply your edging answer from 3a by $12. Type the number only.'},
+    {n:'4', q:'How many different rectangles are possible in question 4?', a:4, type:'number',
+     work:'Four: 9 by 1, 8 by 2, 7 by 3, and 6 by 4.',
+     wrong:'Not quite. The length and width must add to 10, and the length must be longer than the width. Work through the widths in order.'},
+    {n:'4', q:'List all the possibilities you found, and explain how you know you have them all.',
+     type:'open', placeholder:'e.g. 9 m by 1 m, 8 m by 2 m… I know I have them all because…'}
+  ], '🎉 Outstanding problem solving!');
+
+  /* ---------- reveal answers ---------- */
+  document.querySelectorAll('.reveal').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const t=document.getElementById(btn.dataset.target);
+      const open=t.classList.toggle('open');
+      btn.textContent=open?'Hide answers':'Reveal answers';
+    });
+  });
+
+  /* ---------- tier filter ---------- */
+  const chips=document.querySelectorAll('.chip');
+  chips.forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      chips.forEach(c=>c.classList.remove('on'));
+      chip.classList.add('on');
+      const f=chip.dataset.f;
+      document.querySelectorAll('.activity').forEach(a=>{
+        a.classList.toggle('hide', !(f==='all'||a.dataset.tier===f));
+      });
+    });
+  });
+
+  /* ---------- teacher notes toggle ---------- */
+  const tv=document.getElementById('tview'), lbl=document.getElementById('tviewlabel');
+  tv.addEventListener('click',()=>{
+    const studentMode=document.body.classList.toggle('students');
+    document.body.classList.toggle('teacher',!studentMode);
+    tv.setAttribute('aria-pressed',String(!studentMode));
+    lbl.textContent=studentMode?'Teacher notes: off':'Teacher notes: on';
+  });
+
+  /* ---------- success criteria + reflection ---------- */
+  const criteria=[
+    'I can calculate perimeter by adding all the side lengths',
+    'I can use P = 2 × (length + width) to calculate the perimeter of a rectangle',
+    'I can recognise that squares have four equal sides',
+    'I can measure perimeter using appropriate units such as mm, cm, m, and km'
+  ];
+  const iCan=document.getElementById('criteriaList');
+  criteria.forEach(c=>{
+    const row=document.createElement('div'); row.className='rrow';
+    row.innerHTML='<span class="dotmark"></span><span class="txt">'+c+'</span>';
+    iCan.appendChild(row);
+  });
+  const refl=document.getElementById('reflectList');
+  criteria.forEach(c=>{
+    const row=document.createElement('div'); row.className='rrow';
+    const txt=document.createElement('span'); txt.className='txt'; txt.textContent=c;
+    const rate=document.createElement('span'); rate.className='rate';
+    [['got','Got it'],['near','Nearly'],['help','Need help']].forEach(pair=>{
+      const b=document.createElement('button'); b.className=pair[0]; b.textContent=pair[1];
+      b.addEventListener('click',()=>{ rate.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); });
+      rate.appendChild(b);
+    });
+    row.appendChild(txt); row.appendChild(rate); refl.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
